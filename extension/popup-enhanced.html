@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Threat Monitor</title>
+  <title>Threat Monitor Dashboard</title>
   <style>
     * {
       margin: 0;
@@ -12,13 +12,13 @@
     }
 
     body {
-      width: 480px;
-      min-height: 500px;
+      width: 520px;
+      min-height: 600px;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
       background: linear-gradient(180deg, #001a33 0%, #003d66 50%, #001a33 100%);
       padding: 20px;
       position: relative;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
     body::before {
@@ -55,8 +55,104 @@
       font-size: 28px;
     }
 
+    /* Statistics Cards */
+    .stat-card {
+      background: rgba(0, 102, 204, 0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 153, 255, 0.3);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    /* Controls Section */
+    .controls {
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .control-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    input, select {
+      flex: 1;
+      padding: 10px 12px;
+      background: rgba(0, 102, 204, 0.15);
+      border: 1px solid rgba(0, 153, 255, 0.3);
+      border-radius: 8px;
+      color: #e0f2ff;
+      font-size: 13px;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: rgba(224, 242, 255, 0.5);
+    }
+
+    input:focus, select:focus {
+      border-color: rgba(0, 153, 255, 0.6);
+      background: rgba(0, 102, 204, 0.25);
+    }
+
+    select option {
+      background: #001a33;
+      color: #e0f2ff;
+    }
+
+    /* Buttons */
+    button {
+      padding: 10px 20px;
+      background: rgba(0, 102, 204, 0.25);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 153, 255, 0.4);
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    button:hover {
+      background: rgba(0, 102, 204, 0.4);
+      border-color: rgba(0, 153, 255, 0.6);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 153, 255, 0.3);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-export {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: 1px solid rgba(102, 126, 234, 0.5);
+    }
+
+    .btn-export:hover {
+      box-shadow: 0 6px 12px rgba(102, 126, 234, 0.6);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+      border: 1px solid rgba(255, 107, 107, 0.5);
+    }
+
+    .btn-danger:hover {
+      box-shadow: 0 6px 12px rgba(255, 107, 107, 0.6);
+    }
+
+    /* Traffic List */
     #traffic-list {
-      max-height: 350px;
+      max-height: 400px;
       overflow-y: auto;
       padding-right: 8px;
       margin-bottom: 16px;
@@ -92,6 +188,7 @@
       transition: all 0.3s ease;
       color: #e0f2ff;
       font-size: 12px;
+      line-height: 1.6;
     }
 
     .traffic-item:hover {
@@ -125,60 +222,10 @@
       border-color: rgba(255, 204, 0, 0.6);
     }
 
-    /* Button styles */
-    button {
-      padding: 10px 20px;
-      background: rgba(0, 102, 204, 0.25);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(0, 153, 255, 0.4);
-      border-radius: 8px;
-      color: #ffffff;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    button:hover {
-      background: rgba(0, 102, 204, 0.4);
-      border-color: rgba(0, 153, 255, 0.6);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0, 153, 255, 0.3);
-    }
-
-    button:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    .btn-export {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border: 1px solid rgba(102, 126, 234, 0.5);
-      padding: 8px 16px;
-      font-size: 11px;
-    }
-
-    .btn-export:hover {
-      box-shadow: 0 6px 12px rgba(102, 126, 234, 0.6);
-    }
-
-    .btn-danger {
-      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
-      border: 1px solid rgba(255, 107, 107, 0.5);
-    }
-
-    .btn-danger:hover {
-      box-shadow: 0 6px 12px rgba(255, 107, 107, 0.6);
-    }
-
     .button-row {
       display: flex;
       gap: 8px;
-      margin-top: 12px;
+      margin-top: 16px;
     }
 
     .button-row button {
@@ -188,15 +235,43 @@
 </head>
 <body>
   <h2>Threat Monitor</h2>
-  <div id="traffic-list"></div>
 
-  <!-- Export Buttons Row -->
-  <div class="button-row">
-    <button id="export-csv" class="btn-export">📊 CSV</button>
-    <button id="export-json" class="btn-export">📦 JSON</button>
-    <button id="clear-button" class="btn-danger">🗑️ Clear</button>
+  <!-- Statistics Dashboard -->
+  <div id="stats-container"></div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <input
+      type="text"
+      id="search-input"
+      placeholder="🔍 Search threats by URL, type, or description..."
+    />
+
+    <div class="control-row">
+      <select id="severity-filter">
+        <option value="all">All Severities</option>
+        <option value="CRITICAL">Critical Only</option>
+        <option value="HIGH">High Only</option>
+        <option value="MEDIUM">Medium Only</option>
+        <option value="LOW">Low Only</option>
+        <option value="INFO">Info Only</option>
+      </select>
+    </div>
   </div>
 
-  <script src="popup.js"></script>
+  <!-- Threat List -->
+  <div id="traffic-list"></div>
+
+  <!-- Action Buttons -->
+  <div class="button-row">
+    <button id="export-csv" class="btn-export">📊 Export CSV</button>
+    <button id="export-json" class="btn-export">📦 Export JSON</button>
+  </div>
+
+  <div class="button-row">
+    <button id="clear-button" class="btn-danger">🗑️ Clear All</button>
+  </div>
+
+  <script src="popup-enhanced.js"></script>
 </body>
 </html>

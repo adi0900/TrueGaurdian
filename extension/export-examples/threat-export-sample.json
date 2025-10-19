@@ -1,0 +1,355 @@
+{
+  "exportedAt": "2025-10-20T02:30:00.000Z",
+  "totalThreats": 10,
+  "groupedBy": "domain",
+  "filters": {
+    "severity": "all",
+    "resourceType": "all",
+    "search": ""
+  },
+  "statistics": {
+    "criticalThreats": 2,
+    "highThreats": 5,
+    "mediumThreats": 2,
+    "lowThreats": 1,
+    "infoThreats": 0,
+    "uniqueDomains": 8,
+    "uniqueSessions": 3,
+    "uniqueTabs": 3,
+    "avgConfidence": 0.73,
+    "timeRange": {
+      "start": "2025-10-20T01:17:00.000Z",
+      "end": "2025-10-20T01:26:41.000Z",
+      "durationMinutes": 9.68
+    }
+  },
+  "threats": [
+    {
+      "id": "threat_1729388220000_abc123",
+      "timestamp": "2025-10-20T01:17:00.000Z",
+      "detectedAt": 1729388220000,
+      "severity": "CRITICAL",
+      "threat": {
+        "type": "SQLi",
+        "confidence": 0.95,
+        "threatDetected": true,
+        "description": "SQL injection detected in login form. Attacker attempting to bypass authentication using SQL tautology.",
+        "indicators": [
+          "' OR '1'='1",
+          "SQL keyword: OR",
+          "Quote manipulation"
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "https://evil-site.com/login",
+        "body": "{\"username\":\"admin' OR '1'='1\",\"password\":\"test\"}",
+        "initiator": "https://evil-site.com",
+        "requestId": "req_001",
+        "frameId": 0,
+        "parentFrameId": -1
+      },
+      "response": {
+        "status": 500,
+        "aiAnalysis": {
+          "threatDetected": true,
+          "confidence": 0.95,
+          "type": "SQLi",
+          "severity": "CRITICAL"
+        }
+      },
+      "context": {
+        "tab": {
+          "id": 12345,
+          "url": "https://evil-site.com",
+          "title": "Evil Login Page",
+          "favIconUrl": "https://evil-site.com/favicon.ico",
+          "active": true,
+          "windowId": 1,
+          "incognito": false
+        },
+        "session": {
+          "id": "session_1729388000000_abc123",
+          "startTime": 1729388000000,
+          "duration": 220000,
+          "requestCount": 25,
+          "threatCount": 6
+        },
+        "user": {
+          "id": "user_1729000000000_xyz789",
+          "extensionId": "abcdefghijk1234567890",
+          "installDate": 1729000000000
+        },
+        "device": {
+          "browser": {
+            "name": "Chrome",
+            "engine": "Blink"
+          },
+          "os": "Windows 10/11",
+          "platform": "Win32",
+          "language": "en-US",
+          "languages": ["en-US", "en", "es"],
+          "timezone": "America/New_York",
+          "screen": {
+            "width": 1920,
+            "height": 1080,
+            "availWidth": 1920,
+            "availHeight": 1040,
+            "colorDepth": 24,
+            "pixelRatio": 1
+          },
+          "hardware": {
+            "cores": 8,
+            "memory": 16,
+            "connectionType": "4g"
+          }
+        },
+        "resource": {
+          "type": "API",
+          "subtype": "REST",
+          "fileType": "json",
+          "domain": "evil-site.com",
+          "subdomain": null,
+          "tld": "evil-site.com",
+          "protocol": "https",
+          "port": "443",
+          "path": "/login",
+          "contentType": "application/json"
+        }
+      },
+      "actions": {
+        "notified": true,
+        "blocked": false,
+        "exported": true,
+        "webhookSent": true,
+        "siemSent": true
+      }
+    },
+    {
+      "id": "threat_1729388295000_def456",
+      "timestamp": "2025-10-20T01:18:15.000Z",
+      "detectedAt": 1729388295000,
+      "severity": "HIGH",
+      "threat": {
+        "type": "XSS",
+        "confidence": 0.87,
+        "threatDetected": true,
+        "description": "Reflected XSS attack in search parameter. User input not sanitized.",
+        "indicators": [
+          "<script>",
+          "alert()",
+          "Unescaped HTML"
+        ]
+      },
+      "request": {
+        "method": "GET",
+        "url": "https://vulnerable.net/search?q=<script>alert(1)</script>",
+        "body": "N/A",
+        "initiator": "https://vulnerable.net",
+        "requestId": "req_002",
+        "frameId": 0,
+        "parentFrameId": -1
+      },
+      "response": {
+        "status": 200,
+        "aiAnalysis": {
+          "threatDetected": true,
+          "confidence": 0.87,
+          "type": "XSS",
+          "severity": "HIGH"
+        }
+      },
+      "context": {
+        "tab": {
+          "id": 12345,
+          "url": "https://vulnerable.net/search",
+          "title": "Search Results",
+          "favIconUrl": "https://vulnerable.net/favicon.ico",
+          "active": true,
+          "windowId": 1,
+          "incognito": false
+        },
+        "session": {
+          "id": "session_1729388000000_abc123",
+          "startTime": 1729388000000,
+          "duration": 295000,
+          "requestCount": 26,
+          "threatCount": 7
+        },
+        "user": {
+          "id": "user_1729000000000_xyz789",
+          "extensionId": "abcdefghijk1234567890",
+          "installDate": 1729000000000
+        },
+        "device": {
+          "browser": { "name": "Chrome", "engine": "Blink" },
+          "os": "Windows 10/11",
+          "platform": "Win32",
+          "language": "en-US",
+          "languages": ["en-US", "en", "es"],
+          "timezone": "America/New_York",
+          "screen": {
+            "width": 1920,
+            "height": 1080,
+            "availWidth": 1920,
+            "availHeight": 1040,
+            "colorDepth": 24,
+            "pixelRatio": 1
+          },
+          "hardware": {
+            "cores": 8,
+            "memory": 16,
+            "connectionType": "4g"
+          }
+        },
+        "resource": {
+          "type": "API",
+          "subtype": "REST",
+          "fileType": "html",
+          "domain": "vulnerable.net",
+          "subdomain": null,
+          "tld": "vulnerable.net",
+          "protocol": "https",
+          "port": "443",
+          "path": "/search",
+          "contentType": "text/html"
+        }
+      },
+      "actions": {
+        "notified": true,
+        "blocked": false,
+        "exported": true,
+        "webhookSent": true,
+        "siemSent": true
+      }
+    },
+    {
+      "id": "threat_1729388362000_ghi789",
+      "timestamp": "2025-10-20T01:19:22.000Z",
+      "detectedAt": 1729388362000,
+      "severity": "HIGH",
+      "threat": {
+        "type": "Data Exfiltration",
+        "confidence": 0.82,
+        "threatDetected": true,
+        "description": "Sensitive payment data being transmitted to suspicious endpoint.",
+        "indicators": [
+          "Credit card number detected",
+          "CVV code detected",
+          "Suspicious domain"
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "https://suspicious.org/beacon",
+        "body": "{\"creditCard\":\"4111111111111111\",\"cvv\":\"123\"}",
+        "initiator": "https://shopping-site.com",
+        "requestId": "req_003",
+        "frameId": 0,
+        "parentFrameId": -1
+      },
+      "response": {
+        "status": 200,
+        "aiAnalysis": {
+          "threatDetected": true,
+          "confidence": 0.82,
+          "type": "Data Exfiltration",
+          "severity": "HIGH"
+        }
+      },
+      "context": {
+        "tab": {
+          "id": 67890,
+          "url": "https://shopping-site.com/checkout",
+          "title": "Shopping Cart",
+          "favIconUrl": "https://shopping-site.com/favicon.ico",
+          "active": false,
+          "windowId": 1,
+          "incognito": false
+        },
+        "session": {
+          "id": "session_1729388100000_def456",
+          "startTime": 1729388100000,
+          "duration": 262000,
+          "requestCount": 18,
+          "threatCount": 3
+        },
+        "user": {
+          "id": "user_1729000000000_xyz789",
+          "extensionId": "abcdefghijk1234567890",
+          "installDate": 1729000000000
+        },
+        "device": {
+          "browser": { "name": "Chrome", "engine": "Blink" },
+          "os": "Windows 10/11",
+          "platform": "Win32",
+          "language": "en-US",
+          "languages": ["en-US", "en", "es"],
+          "timezone": "America/New_York",
+          "screen": {
+            "width": 1920,
+            "height": 1080,
+            "availWidth": 1920,
+            "availHeight": 1040,
+            "colorDepth": 24,
+            "pixelRatio": 1
+          },
+          "hardware": {
+            "cores": 8,
+            "memory": 16,
+            "connectionType": "4g"
+          }
+        },
+        "resource": {
+          "type": "API",
+          "subtype": "REST",
+          "fileType": "json",
+          "domain": "suspicious.org",
+          "subdomain": null,
+          "tld": "suspicious.org",
+          "protocol": "https",
+          "port": "443",
+          "path": "/beacon",
+          "contentType": "application/json"
+        }
+      },
+      "actions": {
+        "notified": true,
+        "blocked": true,
+        "exported": true,
+        "webhookSent": true,
+        "siemSent": true
+      }
+    }
+  ],
+  "groupedData": {
+    "byDomain": {
+      "evil-site.com": ["threat_1729388220000_abc123"],
+      "vulnerable.net": ["threat_1729388295000_def456"],
+      "suspicious.org": ["threat_1729388362000_ghi789"]
+    },
+    "byResourceType": {
+      "API": ["threat_1729388220000_abc123", "threat_1729388295000_def456", "threat_1729388362000_ghi789"],
+      "JavaScript": [],
+      "Image": []
+    },
+    "byTab": {
+      "12345": ["threat_1729388220000_abc123", "threat_1729388295000_def456"],
+      "67890": ["threat_1729388362000_ghi789"]
+    },
+    "bySeverity": {
+      "CRITICAL": ["threat_1729388220000_abc123"],
+      "HIGH": ["threat_1729388295000_def456", "threat_1729388362000_ghi789"],
+      "MEDIUM": [],
+      "LOW": [],
+      "INFO": []
+    }
+  },
+  "metadata": {
+    "exportVersion": "3.0.0",
+    "extensionVersion": "3.0.0",
+    "exportFormat": "JSON",
+    "compressionUsed": false,
+    "encryptionUsed": false
+  }
+}

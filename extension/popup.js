@@ -101,9 +101,102 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // ============================================================================
+  // EXPORT FUNCTIONALITY
+  // ============================================================================
+
+  function exportToCSV() {
+    chrome.storage.local.get(["responses"], (data) => {
+      const threats = data.responses || [];
+
+      if (threats.length === 0) {
+        alert('No threats to export');
+        return;
+      }
+
+      const headers = [
+        'Timestamp',
+        'Method',
+        'URL',
+        'Status',
+        'Threat Type',
+        'Confidence',
+        'AI Status',
+        'Body'
+      ];
+
+      const rows = threats.map(threat => [
+        threat.timestamp || '',
+        threat.method || '',
+        threat.url || '',
+        threat.status || '',
+        threat.aiResponse?.type || '',
+        threat.aiResponse?.confidence || '',
+        threat.aiResponse?.threatDetected ? 'THREAT' : 'CLEAN',
+        JSON.stringify(threat.body || '').replace(/"/g, '""')
+      ]);
+
+      const csvContent = [
+        headers.join(','),
+        ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+      ].join('\n');
+
+      downloadFile(csvContent, `threat-monitor-${new Date().toISOString()}.csv`, 'text/csv');
+    });
+  }
+
+  function exportToJSON() {
+    chrome.storage.local.get(["responses"], (data) => {
+      const threats = data.responses || [];
+
+      if (threats.length === 0) {
+        alert('No threats to export');
+        return;
+      }
+
+      const exportData = {
+        exportedAt: new Date().toISOString(),
+        totalThreats: threats.length,
+        threats: threats
+      };
+
+      const jsonContent = JSON.stringify(exportData, null, 2);
+      downloadFile(jsonContent, `threat-monitor-${new Date().toISOString()}.json`, 'application/json');
+    });
+  }
+
+  function downloadFile(content, filename, mimeType) {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  // ============================================================================
+  // EVENT LISTENERS
+  // ============================================================================
+
   clearBtn.addEventListener("click", () => {
-    chrome.storage.local.set({ responses: [] }, loadLogs);
+    if (confirm('Are you sure you want to clear all threat logs?')) {
+      chrome.storage.local.set({ responses: [] }, loadLogs);
+    }
   });
+
+  const exportCsvBtn = document.getElementById("export-csv");
+  const exportJsonBtn = document.getElementById("export-json");
+
+  if (exportCsvBtn) {
+    exportCsvBtn.addEventListener("click", exportToCSV);
+  }
+
+  if (exportJsonBtn) {
+    exportJsonBtn.addEventListener("click", exportToJSON);
+  }
 
   loadLogs();
 

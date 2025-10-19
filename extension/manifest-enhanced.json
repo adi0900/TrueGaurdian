@@ -1,0 +1,48 @@
+{
+  "manifest_version": 3,
+  "name": "TrueGuardian Threat Monitor",
+  "version": "2.0.0",
+  "description": "Real-time threat detection with AI-powered analysis, notifications, and SIEM integration",
+  "permissions": [
+    "webRequest",
+    "storage",
+    "activeTab",
+    "notifications",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background-enhanced.js"
+  },
+  "action": {
+    "default_popup": "popup-enhanced.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content-enhanced.js"],
+      "run_at": "document_start",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/*.png"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

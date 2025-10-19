@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Threat Monitor - Advanced Dashboard</title>
+
+  <!-- Chart.js for visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 700px;
+      min-height: 600px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(180deg, #001a33 0%, #003d66 50%, #001a33 100%);
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+      color: #e0f2ff;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 150%;
+      height: 60px;
+      background: linear-gradient(90deg, transparent, rgba(0, 153, 255, 0.8), transparent);
+      filter: blur(20px);
+      z-index: 0;
+    }
+
+    body > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    h2 {
+      color: #ffffff;
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h2::before {
+      content: '🛡️';
+      font-size: 28px;
+    }
+
+    h3 {
+      font-size: 14px;
+      color: #00aaff;
+      margin: 16px 0 8px 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      border-bottom: 2px solid rgba(0, 153, 255, 0.3);
+    }
+
+    .tab {
+      padding: 10px 20px;
+      background: rgba(0, 102, 204, 0.15);
+      border: 1px solid rgba(0, 153, 255, 0.3);
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
+      color: #e0f2ff;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .tab:hover {
+      background: rgba(0, 102, 204, 0.25);
+    }
+
+    .tab.active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-color: #667eea;
+      color: white;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Statistics Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: rgba(0, 102, 204, 0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 153, 255, 0.3);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 153, 255, 0.3);
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: rgba(224, 242, 255, 0.7);
+      margin-top: 4px;
+    }
+
+    /* Charts */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .chart-container {
+      background: rgba(0, 102, 204, 0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 153, 255, 0.3);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .chart-container canvas {
+      max-height: 200px;
+    }
+
+    /* Filters */
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    select, input {
+      padding: 8px 12px;
+      background: rgba(0, 102, 204, 0.15);
+      border: 1px solid rgba(0, 153, 255, 0.3);
+      border-radius: 6px;
+      color: #e0f2ff;
+      font-size: 12px;
+    }
+
+    select option {
+      background: #001a33;
+    }
+
+    input::placeholder {
+      color: rgba(224, 242, 255, 0.5);
+    }
+
+    /* Grouping Controls */
+    .group-controls {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .group-btn {
+      padding: 6px 12px;
+      background: rgba(0, 102, 204, 0.2);
+      border: 1px solid rgba(0, 153, 255, 0.4);
+      border-radius: 6px;
+      color: #e0f2ff;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .group-btn:hover {
+      background: rgba(0, 102, 204, 0.4);
+    }
+
+    .group-btn.active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-color: #667eea;
+    }
+
+    /* Threat List */
+    .threat-group {
+      margin-bottom: 16px;
+    }
+
+    .group-header {
+      background: rgba(0, 102, 204, 0.25);
+      padding: 10px 14px;
+      border-radius: 8px 8px 0 0;
+      border: 1px solid rgba(0, 153, 255, 0.4);
+      font-weight: 600;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .group-header:hover {
+      background: rgba(0, 102, 204, 0.35);
+    }
+
+    .group-count {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 10px;
+    }
+
+    .group-items {
+      border: 1px solid rgba(0, 153, 255, 0.3);
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      padding: 8px;
+      background: rgba(0, 51, 102, 0.1);
+    }
+
+    #threat-list {
+      max-height: 350px;
+      overflow-y: auto;
+      padding-right: 8px;
+      margin-bottom: 16px;
+    }
+
+    #threat-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #threat-list::-webkit-scrollbar-track {
+      background: rgba(0, 51, 102, 0.3);
+      border-radius: 10px;
+    }
+
+    #threat-list::-webkit-scrollbar-thumb {
+      background: rgba(0, 153, 255, 0.4);
+      border-radius: 10px;
+    }
+
+    .threat-item {
+      margin: 6px 0;
+      padding: 12px;
+      border-radius: 8px;
+      background: rgba(0, 102, 204, 0.15);
+      border: 1px solid rgba(0, 153, 255, 0.3);
+      font-size: 11px;
+      line-height: 1.5;
+      transition: all 0.3s ease;
+    }
+
+    .threat-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 153, 255, 0.2);
+    }
+
+    .threat-item.threat {
+      background: rgba(204, 0, 51, 0.2);
+      border-color: rgba(255, 51, 102, 0.4);
+    }
+
+    .threat-item.error {
+      background: rgba(255, 153, 0, 0.15);
+      border-color: rgba(255, 204, 0, 0.4);
+    }
+
+    .threat-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .severity-badge {
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    /* Buttons */
+    button {
+      padding: 8px 16px;
+      background: rgba(0, 102, 204, 0.25);
+      border: 1px solid rgba(0, 153, 255, 0.4);
+      border-radius: 6px;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+    }
+
+    button:hover {
+      background: rgba(0, 102, 204, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .btn-export {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: 1px solid rgba(102, 126, 234, 0.5);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+      border: 1px solid rgba(255, 107, 107, 0.5);
+    }
+
+    .button-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .button-row button {
+      flex: 1;
+    }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #00aaff;
+    }
+  </style>
+</head>
+<body>
+  <h2>Advanced Threat Monitor</h2>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" data-tab="overview">📊 Overview</div>
+    <div class="tab" data-tab="analysis">📈 Analysis</div>
+    <div class="tab" data-tab="threats">🚨 Threats</div>
+    <div class="tab" data-tab="settings">⚙️ Settings</div>
+  </div>
+
+  <!-- Tab Content: Overview -->
+  <div id="overview-tab" class="tab-content active">
+    <!-- Statistics -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="total-requests">0</div>
+        <div class="stat-label">Total Requests</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="total-threats">0</div>
+        <div class="stat-label">Threats Detected</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="critical-threats">0</div>
+        <div class="stat-label">Critical</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="unique-domains">0</div>
+        <div class="stat-label">Unique Domains</div>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-grid">
+      <div class="chart-container">
+        <h3>Threats by Domain</h3>
+        <canvas id="domain-chart"></canvas>
+      </div>
+      <div class="chart-container">
+        <h3>Resource Types</h3>
+        <canvas id="resource-chart"></canvas>
+      </div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="chart-container">
+        <h3>Threats Over Time</h3>
+        <canvas id="timeline-chart"></canvas>
+      </div>
+      <div class="chart-container">
+        <h3>Severity Distribution</h3>
+        <canvas id="severity-chart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab Content: Analysis -->
+  <div id="analysis-tab" class="tab-content">
+    <h3>Detailed Analysis</h3>
+    <div id="analysis-content" class="loading">Loading analysis...</div>
+  </div>
+
+  <!-- Tab Content: Threats -->
+  <div id="threats-tab" class="tab-content">
+    <!-- Filters -->
+    <div class="filters">
+      <select id="severity-filter">
+        <option value="all">All Severities</option>
+        <option value="CRITICAL">Critical</option>
+        <option value="HIGH">High</option>
+        <option value="MEDIUM">Medium</option>
+        <option value="LOW">Low</option>
+      </select>
+      <select id="resource-filter">
+        <option value="all">All Resource Types</option>
+        <option value="API">API</option>
+        <option value="JavaScript">JavaScript</option>
+        <option value="Image">Image</option>
+        <option value="CSS">CSS</option>
+      </select>
+      <input type="text" id="search-input" placeholder="🔍 Search by domain or URL..." />
+    </div>
+
+    <!-- Grouping Controls -->
+    <div class="group-controls">
+      <div class="group-btn active" data-group="none">No Grouping</div>
+      <div class="group-btn" data-group="domain">By Domain</div>
+      <div class="group-btn" data-group="tab">By Tab</div>
+      <div class="group-btn" data-group="type">By Resource Type</div>
+      <div class="group-btn" data-group="severity">By Severity</div>
+    </div>
+
+    <!-- Threat List -->
+    <div id="threat-list"></div>
+
+    <!-- Export Buttons -->
+    <div class="button-row">
+      <button id="export-csv" class="btn-export">📊 Export CSV</button>
+      <button id="export-json" class="btn-export">📦 Export JSON</button>
+      <button id="clear-button" class="btn-danger">🗑️ Clear All</button>
+    </div>
+  </div>
+
+  <!-- Tab Content: Settings -->
+  <div id="settings-tab" class="tab-content">
+    <h3>Extension Settings</h3>
+    <div style="padding: 20px; text-align: center; color: rgba(224, 242, 255, 0.6);">
+      Settings panel coming soon...
+    </div>
+  </div>
+
+  <script src="popup-advanced.js"></script>
+</body>
+</html>
