@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to My App</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fade-in-up {
+      animation: fadeInUp 1s ease-out forwards;
+    }
+    .animate-delay-200 {
+      animation-delay: 0.2s;
+      opacity: 0;
+    }
+    .animate-delay-400 {
+      animation-delay: 0.4s;
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    function HeroSection() {
+      const [isHovered, setIsHovered] = useState(false);
+
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            {/* Headline */}
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold text-gray-900 mb-6 animate-fade-in-up tracking-tight">
+              Welcome to My App
+            </h1>
+
+            {/* Subheadline */}
+            <p className="text-xl md:text-2xl text-gray-600 mb-12 animate-fade-in-up animate-delay-200 max-w-2xl mx-auto font-light">
+              Build something amazing today.
+            </p>
+
+            {/* CTA Button */}
+            <button
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+              className="animate-fade-in-up animate-delay-400 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 rounded-full text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
+            >
+              Get Started
+            </button>
+
+            {/* Decorative Elements */}
+            <div className="mt-20 flex justify-center gap-4">
+              <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></div>
+              <div className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse" style={{animationDelay: '0.2s'}}></div>
+              <div className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" style={{animationDelay: '0.4s'}}></div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      return <HeroSection />;
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

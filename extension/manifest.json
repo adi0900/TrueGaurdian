@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Threat Monitor",
+  "version": "1.0",
+  "description": "Monitors API requests and detects threats via AWS Bedrock.",
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
