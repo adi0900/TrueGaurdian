@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Threat Dashboard - TrueGuardian</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%);
+      min-height: 100vh;
+      color: white;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 1.5rem;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: #9ca3af;
+    }
+
+    .threat-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      transition: all 0.3s ease;
+    }
+
+    .threat-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      transform: translateX(5px);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .badge-critical { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+    .badge-high { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+    .badge-medium { background: rgba(234, 179, 8, 0.2); color: #eab308; }
+    .badge-low { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+
+    .filter-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .filter-btn.active {
+      background: rgba(59, 130, 246, 0.3);
+      border-color: #3b82f6;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    function Navbar() {
+      return (
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md shadow-lg">
+          <div className="max-w-screen-2xl mx-auto px-6">
+            <div className="flex items-center justify-between py-4 border-b border-white/10">
+              <a href="index.html" className="text-white text-2xl md:text-3xl font-black tracking-widest hover:text-gray-300 transition-colors">TG</a>
+              <div className="flex items-center gap-6">
+                <a href="overview.html" className="text-gray-400 text-sm font-medium hover:text-white transition-colors">Overview</a>
+                <a href="threats.html" className="text-white text-sm font-medium hover:text-blue-400 transition-colors">Threat Dashboard</a>
+                <a href="documentation.html" className="text-gray-400 text-sm font-medium hover:text-white transition-colors">Documentation</a>
+                <a href="https://github.com/adi0900/TrueGaurdian.git" target="_blank" className="text-gray-400 text-sm font-medium hover:text-white transition-colors">GitHub</a>
+              </div>
+            </div>
+          </div>
+        </nav>
+      );
+    }
+
+    function ThreatDashboard() {
+      const [activeFilter, setActiveFilter] = useState('all');
+      const chartRef = useRef(null);
+      const chartInstance = useRef(null);
+
+      // Sample threat data
+      const threats = [
+        { id: 1, type: 'SQLi', severity: 'CRITICAL', domain: 'evil-site.com', time: '2 mins ago', confidence: 95 },
+        { id: 2, type: 'XSS', severity: 'HIGH', domain: 'vulnerable.net', time: '5 mins ago', confidence: 87 },
+        { id: 3, type: 'Data Exfiltration', severity: 'HIGH', domain: 'suspicious.org', time: '8 mins ago', confidence: 82 },
+        { id: 4, type: 'CSRF', severity: 'MEDIUM', domain: 'bank.example.com', time: '12 mins ago', confidence: 78 },
+        { id: 5, type: 'Malware', severity: 'HIGH', domain: 'cdn.malicious.com', time: '15 mins ago', confidence: 91 },
+        { id: 6, type: 'Privacy Violation', severity: 'LOW', domain: 'analytics.tracking.net', time: '20 mins ago', confidence: 65 }
+      ];
+
+      const stats = [
+        { label: 'Total Threats', value: threats.length, color: 'from-red-500 to-pink-500' },
+        { label: 'Critical', value: threats.filter(t => t.severity === 'CRITICAL').length, color: 'from-orange-500 to-red-500' },
+        { label: 'Unique Domains', value: new Set(threats.map(t => t.domain)).size, color: 'from-blue-500 to-cyan-500' },
+        { label: 'Avg Confidence', value: Math.round(threats.reduce((acc, t) => acc + t.confidence, 0) / threats.length) + '%', color: 'from-purple-500 to-pink-500' }
+      ];
+
+      useEffect(() => {
+        if (chartRef.current) {
+          const ctx = chartRef.current.getContext('2d');
+
+          // Destroy existing chart
+          if (chartInstance.current) {
+            chartInstance.current.destroy();
+          }
+
+          // Create new chart
+          chartInstance.current = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'],
+              datasets: [{
+                data: [
+                  threats.filter(t => t.severity === 'CRITICAL').length,
+                  threats.filter(t => t.severity === 'HIGH').length,
+                  threats.filter(t => t.severity === 'MEDIUM').length,
+                  threats.filter(t => t.severity === 'LOW').length
+                ],
+                backgroundColor: ['#ef4444', '#f97316', '#eab308', '#22c55e'],
+                borderWidth: 0
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: true,
+              plugins: {
+                legend: {
+                  position: 'bottom',
+                  labels: { color: '#fff', padding: 15, font: { size: 12 } }
+                }
+              }
+            }
+          });
+        }
+
+        return () => {
+          if (chartInstance.current) {
+            chartInstance.current.destroy();
+          }
+        };
+      }, []);
+
+      const filteredThreats = activeFilter === 'all'
+        ? threats
+        : threats.filter(t => t.severity === activeFilter);
+
+      return (
+        <div className="pt-24 pb-16 px-6">
+          <div className="max-w-screen-2xl mx-auto">
+            {/* Header */}
+            <div className="mb-8">
+              <h1 className="text-4xl font-bold mb-2">Threat Dashboard</h1>
+              <p className="text-gray-400">Real-time monitoring of security threats detected by TrueGuardian</p>
+            </div>
+
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              {stats.map((stat, index) => (
+                <div key={index} className="glass-card stat-card">
+                  <div className={`stat-value bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
+                    {stat.value}
+                  </div>
+                  <div className="stat-label">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Threat List */}
+              <div className="lg:col-span-2">
+                <div className="glass-card">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-2xl font-semibold">Recent Threats</h2>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setActiveFilter('all')}
+                        className={`filter-btn text-sm ${activeFilter === 'all' ? 'active' : ''}`}
+                      >
+                        All
+                      </button>
+                      <button
+                        onClick={() => setActiveFilter('CRITICAL')}
+                        className={`filter-btn text-sm ${activeFilter === 'CRITICAL' ? 'active' : ''}`}
+                      >
+                        Critical
+                      </button>
+                      <button
+                        onClick={() => setActiveFilter('HIGH')}
+                        className={`filter-btn text-sm ${activeFilter === 'HIGH' ? 'active' : ''}`}
+                      >
+                        High
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    {filteredThreats.map((threat) => (
+                      <div key={threat.id} className="threat-item">
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="flex items-center gap-3">
+                            <span className="text-2xl">🚨</span>
+                            <div>
+                              <div className="font-semibold">{threat.type}</div>
+                              <div className="text-sm text-gray-400">{threat.domain}</div>
+                            </div>
+                          </div>
+                          <span className={`badge badge-${threat.severity.toLowerCase()}`}>
+                            {threat.severity}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm text-gray-400 mt-2">
+                          <span>{threat.time}</span>
+                          <span>Confidence: {threat.confidence}%</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Chart */}
+              <div className="lg:col-span-1">
+                <div className="glass-card">
+                  <h2 className="text-xl font-semibold mb-4">Severity Distribution</h2>
+                  <canvas ref={chartRef} style={{ maxHeight: '300px' }}></canvas>
+                </div>
+
+                {/* Quick Actions */}
+                <div className="glass-card mt-6">
+                  <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
+                  <div className="space-y-3">
+                    <button className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white py-2 px-4 rounded-lg font-medium transition-all">
+                      📊 Export CSV
+                    </button>
+                    <button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-2 px-4 rounded-lg font-medium transition-all">
+                      📦 Export JSON
+                    </button>
+                    <button className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white py-2 px-4 rounded-lg font-medium transition-all">
+                      🗑️ Clear All
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      return (
+        <div className="min-h-screen">
+          <Navbar />
+          <ThreatDashboard />
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

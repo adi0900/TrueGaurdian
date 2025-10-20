@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service - TrueGuardian</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%);
+      min-height: 100vh;
+      color: white;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+    .section { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+    .section:last-child { border-bottom: none; }
+    @media print {
+      body { background: white; color: black; }
+      .glass-card { background: white; border: 1px solid #ccc; }
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    function Navbar() {
+      return (
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md shadow-lg no-print">
+          <div className="max-w-screen-2xl mx-auto px-6">
+            <div className="flex items-center justify-between py-4 border-b border-white/10">
+              <a href="index.html" className="text-white text-2xl md:text-3xl font-black tracking-widest hover:text-gray-300 transition-colors">TG</a>
+              <button onClick={() => window.print()} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all">
+                📥 Download PDF
+              </button>
+            </div>
+          </div>
+        </nav>
+      );
+    }
+
+    function TermsOfService() {
+      return (
+        <div className="pt-24 pb-16 px-6">
+          <div className="max-w-4xl mx-auto">
+            <div className="glass-card">
+              <div className="text-center mb-8">
+                <h1 className="text-4xl md:text-5xl font-bold mb-4">Terms of Service</h1>
+                <p className="text-gray-400">Last Updated: January 20, 2025</p>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">1. Acceptance of Terms</h2>
+                <p className="text-gray-300 leading-relaxed">
+                  By installing, accessing, or using TrueGuardian browser extension ("the Extension"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not install or use the Extension.
+                </p>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">2. Description of Service</h2>
+                <p className="text-gray-300 mb-3">
+                  TrueGuardian is a browser extension that provides:
+                </p>
+                <ul className="list-disc list-inside text-gray-300 space-y-2 ml-4">
+                  <li>Real-time threat detection for web requests (SQLi, XSS, CSRF, etc.)</li>
+                  <li>AI-powered security analysis using AWS Bedrock (optional)</li>
+                  <li>Interactive threat visualization and analytics dashboard</li>
+                  <li>Threat data export in CSV and JSON formats</li>
+                  <li>Browser notifications and alerts for detected threats</li>
+                  <li>Integration capabilities with SIEM and cloud services</li>
+                </ul>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">3. License Grant</h2>
+                <h3 className="text-lg font-semibold mb-3">3.1 Limited License</h3>
+                <p className="text-gray-300 mb-3">
+                  We grant you a limited, non-exclusive, non-transferable, revocable license to install and use the Extension for personal or commercial security monitoring purposes.
+                </p>
+
+                <h3 className="text-lg font-semibold mb-3">3.2 Restrictions</h3>
+                <p className="text-gray-300 mb-3">You may NOT:</p>
+                <ul className="list-disc list-inside text-gray-300 space-y-2 ml-4">
+                  <li>Reverse engineer, decompile, or disassemble the Extension</li>
+                  <li>Modify, adapt, or create derivative works without permission</li>
+                  <li>Remove or alter any proprietary notices or labels</li>
+                  <li>Use the Extension for malicious purposes or illegal activities</li>
+                  <li>Redistribute, resell, or sublicense the Extension</li>
+                  <li>Use the Extension to attack, harm, or compromise third-party systems</li>
+                </ul>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">4. User Responsibilities</h2>
+                <h3 className="text-lg font-semibold mb-3">4.1 Compliance</h3>
+                <p className="text-gray-300 mb-3">You agree to:</p>
+                <ul className="list-disc list-inside text-gray-300 space-y-2 ml-4">
+                  <li>Use the Extension in compliance with all applicable laws and regulations</li>
+                  <li>Obtain necessary permissions before monitoring network traffic</li>
+                  <li>Respect privacy rights of other users on shared networks</li>
+                  <li>Secure your AWS credentials if using cloud integration features</li>
+                  <li>Not use the Extension to violate any third-party rights</li>
+                </ul>
+
+                <h3 className="text-lg font-semibold mb-3 mt-4">4.2 Account Security</h3>
+                <p className="text-gray-300">
+                  If you configure AWS Bedrock or webhook integrations, you are responsible for maintaining the confidentiality of your credentials and API keys.
+                </p>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">5. Disclaimer of Warranties</h2>
+                <div className="bg-yellow-900/20 border border-yellow-500/50 rounded-lg p-4 mb-3">
+                  <p className="text-yellow-200 font-semibold mb-2">⚠️ IMPORTANT</p>
+                  <p className="text-gray-300 text-sm">
+                    THE EXTENSION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.
+                  </p>
+                </div>
+                <p className="text-gray-300 mb-3">We specifically disclaim:</p>
+                <ul className="list-disc list-inside text-gray-300 space-y-2 ml-4">
+                  <li><strong>Accuracy:</strong> No guarantee that threat detection is 100% accurate or complete</li>
+                  <li><strong>Reliability:</strong> No guarantee of uninterrupted or error-free operation</li>
+                  <li><strong>Security:</strong> No guarantee that the Extension will prevent all security breaches</li>
+                  <li><strong>Compatibility:</strong> No guarantee of compatibility with all websites or browsers</li>
+                  <li><strong>Fitness:</strong> No warranty that the Extension meets your specific requirements</li>
+                </ul>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">6. Limitation of Liability</h2>
+                <div className="bg-red-900/20 border border-red-500/50 rounded-lg p-4 mb-3">
+                  <p className="text-red-200 font-semibold mb-2">⚠️ LIABILITY DISCLAIMER</p>
+                  <p className="text-gray-300 text-sm">
+                    TO THE MAXIMUM EXTENT PERMITTED BY LAW, WE SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES.
+                  </p>
+                </div>
+                <p className="text-gray-300 mb-3">This includes, but is not limited to, damages for:</p>
+                <ul className="list-disc list-inside text-gray-300 space-y-2 ml-4">
+                  <li>Loss of data or profits</li>
+                  <li>Security breaches not detected by the Extension</li>
+                  <li>System downtime or interruption</li>
+                  <li>False positive or false negative threat detections</li>
+                  <li>Unauthorized access to your systems or data</li>
+                  <li>Third-party service failures (AWS, webhooks, etc.)</li>
+                </ul>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">7. Third-Party Services</h2>
+                <p className="text-gray-300 mb-3">
+                  The Extension may integrate with third-party services (AWS Bedrock, SIEM systems, etc.). Your use of these services is governed by their respective terms and policies. We are not responsible for:
+                </p>
+                <ul className="list-disc list-inside text-gray-300 space-y-2 ml-4">
+                  <li>Third-party service availability or performance</li>
+                  <li>Costs associated with third-party services</li>
+                  <li>Third-party data practices or security</li>
+                  <li>Changes to third-party APIs or services</li>
+                </ul>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">8. Data and Privacy</h2>
+                <p className="text-gray-300 mb-3">
+                  Your use of the Extension is also governed by our <a href="privacy-policy.html" className="text-blue-400 hover:text-blue-300">Privacy Policy</a>. Key points:
+                </p>
+                <ul className="list-disc list-inside text-gray-300 space-y-2 ml-4">
+                  <li>Threat data is stored locally in your browser by default</li>
+                  <li>No data is transmitted to our servers</li>
+                  <li>Optional cloud features require your own AWS credentials</li>
+                  <li>You can export or delete your data at any time</li>
+                </ul>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">9. Intellectual Property</h2>
+                <p className="text-gray-300 mb-3">
+                  The Extension and all related materials are protected by copyright, trademark, and other intellectual property laws. All rights not expressly granted are reserved.
+                </p>
+                <h3 className="text-lg font-semibold mb-3">9.1 Open Source Components</h3>
+                <p className="text-gray-300">
+                  The Extension uses open-source libraries (Chart.js, etc.) governed by their respective licenses. See the LICENSE file in the extension folder for details.
+                </p>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">10. Updates and Changes</h2>
+                <h3 className="text-lg font-semibold mb-3">10.1 Extension Updates</h3>
+                <p className="text-gray-300 mb-3">
+                  We may update the Extension from time to time to add features, fix bugs, or improve performance. Updates may be automatic or require manual installation.
+                </p>
+
+                <h3 className="text-lg font-semibold mb-3">10.2 Terms Changes</h3>
+                <p className="text-gray-300">
+                  We reserve the right to modify these Terms at any time. Changes will be posted with an updated "Last Updated" date. Continued use after changes constitutes acceptance.
+                </p>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">11. Termination</h2>
+                <p className="text-gray-300 mb-3">
+                  You may terminate this agreement by uninstalling the Extension. We may terminate or suspend your access if you violate these Terms. Upon termination:
+                </p>
+                <ul className="list-disc list-inside text-gray-300 space-y-2 ml-4">
+                  <li>Your license to use the Extension is immediately revoked</li>
+                  <li>You must uninstall and cease all use of the Extension</li>
+                  <li>Local data will be deleted upon uninstallation</li>
+                </ul>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">12. Governing Law</h2>
+                <p className="text-gray-300">
+                  These Terms shall be governed by and construed in accordance with applicable laws, without regard to conflict of law principles. Any disputes shall be resolved through binding arbitration or in courts of competent jurisdiction.
+                </p>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">13. Contact Information</h2>
+                <p className="text-gray-300 mb-3">
+                  For questions about these Terms, please contact us:
+                </p>
+                <ul className="text-gray-300 space-y-2">
+                  <li><strong>GitHub:</strong> <a href="https://github.com/adi0900/TrueGaurdian.git" target="_blank" className="text-blue-400 hover:text-blue-300">https://github.com/adi0900/TrueGaurdian.git</a></li>
+                  <li><strong>Support:</strong> <a href="support.html" className="text-blue-400 hover:text-blue-300">Visit Support Page</a></li>
+                </ul>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">14. Entire Agreement</h2>
+                <p className="text-gray-300">
+                  These Terms, together with the Privacy Policy, constitute the entire agreement between you and TrueGuardian regarding the Extension and supersede all prior agreements and understandings.
+                </p>
+              </div>
+
+              <div className="text-center pt-8 border-t border-white/10">
+                <p className="text-gray-400 text-sm mb-2">
+                  By using TrueGuardian, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.
+                </p>
+                <p className="text-gray-500 text-sm">© 2025 TrueGuardian. All rights reserved.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      return (
+        <div className="min-h-screen">
+          <Navbar />
+          <TermsOfService />
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation - TrueGuardian</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%);
+      min-height: 100vh;
+      color: white;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+
+    .doc-section {
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .doc-section:last-child {
+      border-bottom: none;
+    }
+
+    .code-block {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1rem 0;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-weight: bold;
+      margin-right: 0.75rem;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 100px;
+    }
+
+    .sidebar-link {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: #9ca3af;
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar-link:hover {
+      color: white;
+      border-left-color: #3b82f6;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .sidebar-link.active {
+      color: #3b82f6;
+      border-left-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    function Navbar() {
+      return (
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md shadow-lg">
+          <div className="max-w-screen-2xl mx-auto px-6">
+            <div className="flex items-center justify-between py-4 border-b border-white/10">
+              <a href="index.html" className="text-white text-2xl md:text-3xl font-black tracking-widest hover:text-gray-300 transition-colors">TG</a>
+              <div className="flex items-center gap-6">
+                <a href="overview.html" className="text-gray-400 text-sm font-medium hover:text-white transition-colors">Overview</a>
+                <a href="threats.html" className="text-gray-400 text-sm font-medium hover:text-white transition-colors">Threat Dashboard</a>
+                <a href="documentation.html" className="text-white text-sm font-medium hover:text-blue-400 transition-colors">Documentation</a>
+                <a href="https://github.com/adi0900/TrueGaurdian.git" target="_blank" className="text-gray-400 text-sm font-medium hover:text-white transition-colors">GitHub</a>
+              </div>
+            </div>
+          </div>
+        </nav>
+      );
+    }
+
+    function Documentation() {
+      const [activeSection, setActiveSection] = useState('installation');
+
+      const sections = [
+        { id: 'installation', title: 'Installation', icon: '📦' },
+        { id: 'quickstart', title: 'Quick Start', icon: '🚀' },
+        { id: 'features', title: 'Features', icon: '✨' },
+        { id: 'api', title: 'API Reference', icon: '📚' },
+        { id: 'troubleshooting', title: 'Troubleshooting', icon: '🔧' }
+      ];
+
+      return (
+        <div className="pt-24 pb-16 px-6">
+          <div className="max-w-screen-2xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+              {/* Sidebar */}
+              <div className="lg:col-span-1">
+                <div className="glass-card sidebar">
+                  <h3 className="text-lg font-semibold mb-4">Documentation</h3>
+                  <nav>
+                    {sections.map(section => (
+                      <a
+                        key={section.id}
+                        href={`#${section.id}`}
+                        className={`sidebar-link ${activeSection === section.id ? 'active' : ''}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setActiveSection(section.id);
+                          document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth' });
+                        }}
+                      >
+                        {section.icon} {section.title}
+                      </a>
+                    ))}
+                  </nav>
+                </div>
+              </div>
+
+              {/* Main Content */}
+              <div className="lg:col-span-3">
+                <div className="glass-card">
+                  {/* Installation */}
+                  <div id="installation" className="doc-section">
+                    <h2 className="text-3xl font-bold mb-4">📦 Installation</h2>
+                    <p className="text-gray-300 mb-4">Follow these steps to install TrueGuardian extension in your Chrome browser:</p>
+
+                    <div className="space-y-4">
+                      <div className="flex items-start">
+                        <div className="step-number bg-gradient-to-br from-blue-500 to-cyan-500">1</div>
+                        <div>
+                          <h3 className="font-semibold mb-2">Download Extension</h3>
+                          <p className="text-gray-400 text-sm mb-2">Click the download button on the homepage or clone from GitHub:</p>
+                          <div className="code-block">
+                            git clone https://github.com/adi0900/TrueGaurdian.git
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start">
+                        <div className="step-number bg-gradient-to-br from-purple-500 to-pink-500">2</div>
+                        <div>
+                          <h3 className="font-semibold mb-2">Open Chrome Extensions</h3>
+                          <p className="text-gray-400 text-sm mb-2">Navigate to Chrome extensions page:</p>
+                          <div className="code-block">
+                            chrome://extensions/
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start">
+                        <div className="step-number bg-gradient-to-br from-green-500 to-emerald-500">3</div>
+                        <div>
+                          <h3 className="font-semibold mb-2">Enable Developer Mode</h3>
+                          <p className="text-gray-400 text-sm">Toggle the "Developer mode" switch in the top right corner</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start">
+                        <div className="step-number bg-gradient-to-br from-orange-500 to-red-500">4</div>
+                        <div>
+                          <h3 className="font-semibold mb-2">Load Extension</h3>
+                          <p className="text-gray-400 text-sm">Click "Load unpacked" and select the extension folder</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start">
+                        <div className="step-number bg-gradient-to-br from-indigo-500 to-purple-500">5</div>
+                        <div>
+                          <h3 className="font-semibold mb-2">Pin to Toolbar</h3>
+                          <p className="text-gray-400 text-sm">Click the puzzle icon and pin TrueGuardian to your toolbar</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Quick Start */}
+                  <div id="quickstart" className="doc-section">
+                    <h2 className="text-3xl font-bold mb-4">🚀 Quick Start</h2>
+                    <p className="text-gray-300 mb-4">Get started with TrueGuardian in 5 minutes:</p>
+
+                    <h3 className="text-xl font-semibold mb-3">Activate Advanced Features</h3>
+                    <p className="text-gray-400 text-sm mb-2">For the full dashboard experience with charts and grouping:</p>
+                    <div className="code-block">
+                      cd extension<br/>
+                      copy background-advanced.js background.js<br/>
+                      copy popup-advanced.html popup.html<br/>
+                      copy popup-advanced.js popup.js
+                    </div>
+
+                    <h3 className="text-xl font-semibold mb-3 mt-6">Open Dashboard</h3>
+                    <p className="text-gray-400 text-sm mb-4">Click the TrueGuardian icon in your toolbar to open the dashboard with:</p>
+                    <ul className="list-disc list-inside text-gray-400 text-sm space-y-2 ml-4">
+                      <li>📊 Overview tab with statistics and charts</li>
+                      <li>📈 Analysis tab with detailed breakdowns</li>
+                      <li>🚨 Threats tab with filtering and grouping</li>
+                      <li>⚙️ Settings tab for configuration</li>
+                    </ul>
+                  </div>
+
+                  {/* Features */}
+                  <div id="features" className="doc-section">
+                    <h2 className="text-3xl font-bold mb-4">✨ Features</h2>
+
+                    <div className="space-y-6">
+                      <div>
+                        <h3 className="text-xl font-semibold mb-2">🛡️ AI-Powered Threat Detection</h3>
+                        <p className="text-gray-400 text-sm">Detects SQLi, XSS, CSRF, RCE, data exfiltration, and more using AWS Bedrock Claude 3.5 Sonnet</p>
+                      </div>
+
+                      <div>
+                        <h3 className="text-xl font-semibold mb-2">📊 Interactive Visualizations</h3>
+                        <p className="text-gray-400 text-sm mb-2">4 Chart.js powered visualizations:</p>
+                        <ul className="list-disc list-inside text-gray-400 text-sm space-y-1 ml-4">
+                          <li>Threats by Domain (Bar Chart)</li>
+                          <li>Resource Types (Doughnut Chart)</li>
+                          <li>Threats Over Time (Line Chart)</li>
+                          <li>Severity Distribution (Bar Chart)</li>
+                        </ul>
+                      </div>
+
+                      <div>
+                        <h3 className="text-xl font-semibold mb-2">🔔 Real-Time Notifications</h3>
+                        <p className="text-gray-400 text-sm">Browser notifications, badge updates, and on-page warning modals for critical threats</p>
+                      </div>
+
+                      <div>
+                        <h3 className="text-xl font-semibold mb-2">📁 Advanced Grouping</h3>
+                        <p className="text-gray-400 text-sm">Group threats by domain, tab/session, resource type, or severity level</p>
+                      </div>
+
+                      <div>
+                        <h3 className="text-xl font-semibold mb-2">📤 Export & Integration</h3>
+                        <p className="text-gray-400 text-sm">Export to CSV/JSON with full context, integrate with SIEM systems, AWS SNS/EventBridge</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* API Reference */}
+                  <div id="api" className="doc-section">
+                    <h2 className="text-3xl font-bold mb-4">📚 API Reference</h2>
+
+                    <h3 className="text-xl font-semibold mb-3">Threat Object Structure</h3>
+                    <div className="code-block">
+{`{
+  "id": "threat_1729388220000_abc123",
+  "timestamp": "2025-10-20T01:17:00.000Z",
+  "severity": "CRITICAL",
+  "threat": {
+    "type": "SQLi",
+    "confidence": 0.95,
+    "description": "SQL injection detected"
+  },
+  "context": {
+    "tab": { "id": 12345, "title": "Page Title" },
+    "session": { "id": "session_abc", "requestCount": 25 },
+    "device": { "browser": "Chrome", "os": "Windows 10/11" },
+    "resource": { "type": "API", "domain": "example.com" }
+  }
+}`}
+                    </div>
+
+                    <h3 className="text-xl font-semibold mb-3 mt-6">Chrome Extension APIs Used</h3>
+                    <ul className="list-disc list-inside text-gray-400 text-sm space-y-2 ml-4">
+                      <li><code className="text-blue-400">chrome.webRequest</code> - Request interception</li>
+                      <li><code className="text-blue-400">chrome.storage</code> - Threat data storage</li>
+                      <li><code className="text-blue-400">chrome.tabs</code> - Tab information</li>
+                      <li><code className="text-blue-400">chrome.notifications</code> - Push notifications</li>
+                      <li><code className="text-blue-400">chrome.action</code> - Badge management</li>
+                    </ul>
+                  </div>
+
+                  {/* Troubleshooting */}
+                  <div id="troubleshooting" className="doc-section">
+                    <h2 className="text-3xl font-bold mb-4">🔧 Troubleshooting</h2>
+
+                    <div className="space-y-6">
+                      <div>
+                        <h3 className="text-lg font-semibold mb-2">Charts Not Loading?</h3>
+                        <p className="text-gray-400 text-sm mb-2">Ensure internet connection for Chart.js CDN. Check console for errors:</p>
+                        <div className="code-block">
+                          Open popup → F12 → Console<br/>
+                          Should see: "Chart.js loaded"
+                        </div>
+                      </div>
+
+                      <div>
+                        <h3 className="text-lg font-semibold mb-2">No Threats Detected?</h3>
+                        <p className="text-gray-400 text-sm">Check AWS Bedrock credentials and ensure API endpoint is configured correctly</p>
+                      </div>
+
+                      <div>
+                        <h3 className="text-lg font-semibold mb-2">Extension Not Working?</h3>
+                        <p className="text-gray-400 text-sm mb-2">Reload the extension:</p>
+                        <div className="code-block">
+                          chrome://extensions/ → Find TrueGuardian → Click Reload
+                        </div>
+                      </div>
+
+                      <div>
+                        <h3 className="text-lg font-semibold mb-2">Need More Help?</h3>
+                        <p className="text-gray-400 text-sm">Visit our <a href="https://github.com/adi0900/TrueGaurdian.git" target="_blank" className="text-blue-400 hover:text-blue-300">GitHub repository</a> or check the README files in the extension folder</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      return (
+        <div className="min-h-screen">
+          <Navbar />
+          <Documentation />
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

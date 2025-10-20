@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy - TrueGuardian</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%);
+      min-height: 100vh;
+      color: white;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+    .section { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+    .section:last-child { border-bottom: none; }
+    @media print {
+      body { background: white; color: black; }
+      .glass-card { background: white; border: 1px solid #ccc; }
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    function Navbar() {
+      return (
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md shadow-lg no-print">
+          <div className="max-w-screen-2xl mx-auto px-6">
+            <div className="flex items-center justify-between py-4 border-b border-white/10">
+              <a href="index.html" className="text-white text-2xl md:text-3xl font-black tracking-widest hover:text-gray-300 transition-colors">TG</a>
+              <button onClick={() => window.print()} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all">
+                📥 Download PDF
+              </button>
+            </div>
+          </div>
+        </nav>
+      );
+    }
+
+    function PrivacyPolicy() {
+      return (
+        <div className="pt-24 pb-16 px-6">
+          <div className="max-w-4xl mx-auto">
+            <div className="glass-card">
+              <div className="text-center mb-8">
+                <h1 className="text-4xl md:text-5xl font-bold mb-4">Privacy Policy</h1>
+                <p className="text-gray-400">Last Updated: January 20, 2025</p>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">1. Introduction</h2>
+                <p className="text-gray-300 leading-relaxed">
+                  TrueGuardian ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how our browser extension collects, uses, stores, and protects your information when you use TrueGuardian Threat Monitor.
+                </p>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">2. Information We Collect</h2>
+                <h3 className="text-lg font-semibold mb-3">2.1 Automatically Collected Information</h3>
+                <ul className="list-disc list-inside text-gray-300 space-y-2 ml-4 mb-4">
+                  <li><strong>Network Request Data:</strong> URLs, HTTP methods, request/response headers, request bodies (for threat analysis only)</li>
+                  <li><strong>Threat Detection Data:</strong> Security threat indicators, confidence scores, AI analysis results</li>
+                  <li><strong>Browser Context:</strong> Tab IDs, tab titles, active window information</li>
+                  <li><strong>Device Information:</strong> Browser name and version, operating system, screen resolution, timezone</li>
+                  <li><strong>Session Data:</strong> Session IDs, request counts, threat counts per session</li>
+                </ul>
+
+                <h3 className="text-lg font-semibold mb-3">2.2 Information NOT Collected</h3>
+                <ul className="list-disc list-inside text-gray-300 space-y-2 ml-4">
+                  <li>Personal identification information (name, email, phone number)</li>
+                  <li>Passwords or authentication credentials</li>
+                  <li>Financial information or payment details</li>
+                  <li>Browsing history outside of threat detection scope</li>
+                </ul>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">3. How We Use Your Information</h2>
+                <p className="text-gray-300 mb-3">We use collected information exclusively for:</p>
+                <ul className="list-disc list-inside text-gray-300 space-y-2 ml-4">
+                  <li><strong>Threat Detection:</strong> Analyzing network requests for security vulnerabilities (SQLi, XSS, CSRF, etc.)</li>
+                  <li><strong>Security Alerts:</strong> Providing real-time notifications about detected threats</li>
+                  <li><strong>Analytics:</strong> Displaying threat statistics and visualizations in the dashboard</li>
+                  <li><strong>Export Functionality:</strong> Allowing users to export threat data for compliance and auditing</li>
+                  <li><strong>Service Improvement:</strong> Improving threat detection accuracy and user experience</li>
+                </ul>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">4. Data Storage</h2>
+                <h3 className="text-lg font-semibold mb-3">4.1 Local Storage</h3>
+                <p className="text-gray-300 mb-3">
+                  All threat data is stored locally in your browser using Chrome Storage API. No data is transmitted to remote servers by default.
+                </p>
+
+                <h3 className="text-lg font-semibold mb-3">4.2 Cloud Storage (Optional)</h3>
+                <p className="text-gray-300 mb-3">
+                  If you configure AWS Bedrock integration, threat data may be sent to AWS services for AI analysis. This is optional and requires your explicit configuration with your own AWS credentials.
+                </p>
+
+                <h3 className="text-lg font-semibold mb-3">4.3 Data Retention</h3>
+                <p className="text-gray-300">
+                  Threat data is retained locally until you manually clear it using the "Clear All" button or uninstall the extension.
+                </p>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">5. Data Sharing</h2>
+                <p className="text-gray-300 mb-3">We do NOT share your data with third parties, except:</p>
+                <ul className="list-disc list-inside text-gray-300 space-y-2 ml-4">
+                  <li><strong>AWS Bedrock (Optional):</strong> Only if you configure AWS credentials for AI threat analysis</li>
+                  <li><strong>SIEM Integration (Optional):</strong> Only if you configure webhook endpoints for security monitoring</li>
+                  <li><strong>User-Initiated Exports:</strong> When you explicitly export data to CSV/JSON files</li>
+                  <li><strong>Legal Requirements:</strong> If required by law or to protect our legal rights</li>
+                </ul>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">6. Third-Party Services</h2>
+                <p className="text-gray-300 mb-3">The extension may interact with:</p>
+                <ul className="list-disc list-inside text-gray-300 space-y-2 ml-4">
+                  <li><strong>Chart.js CDN:</strong> For loading visualization library (cdn.jsdelivr.net)</li>
+                  <li><strong>AWS Bedrock:</strong> For AI-powered threat analysis (optional, user-configured)</li>
+                  <li><strong>Custom Webhooks:</strong> For SIEM integration (optional, user-configured)</li>
+                </ul>
+                <p className="text-gray-300 mt-3">
+                  These services have their own privacy policies. We are not responsible for their data practices.
+                </p>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">7. Your Rights</h2>
+                <p className="text-gray-300 mb-3">You have the right to:</p>
+                <ul className="list-disc list-inside text-gray-300 space-y-2 ml-4">
+                  <li><strong>Access:</strong> View all threat data in the extension dashboard</li>
+                  <li><strong>Export:</strong> Download your threat data in CSV or JSON format</li>
+                  <li><strong>Delete:</strong> Clear all threat data using the "Clear All" button</li>
+                  <li><strong>Uninstall:</strong> Remove the extension completely to delete all local data</li>
+                  <li><strong>Opt-Out:</strong> Disable specific features (notifications, AWS integration) in settings</li>
+                </ul>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">8. Security Measures</h2>
+                <ul className="list-disc list-inside text-gray-300 space-y-2 ml-4">
+                  <li>All data is stored locally in encrypted Chrome storage</li>
+                  <li>HTTPS-only communication with external services</li>
+                  <li>No plaintext password or credential storage</li>
+                  <li>Manifest V3 compliance for enhanced security</li>
+                  <li>Content Security Policy (CSP) enforcement</li>
+                </ul>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">9. Children's Privacy</h2>
+                <p className="text-gray-300">
+                  TrueGuardian is not intended for users under 13 years of age. We do not knowingly collect information from children under 13.
+                </p>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">10. Changes to This Policy</h2>
+                <p className="text-gray-300">
+                  We may update this Privacy Policy from time to time. Changes will be posted with an updated "Last Updated" date. Continued use of the extension after changes constitutes acceptance of the updated policy.
+                </p>
+              </div>
+
+              <div className="section">
+                <h2 className="text-2xl font-bold mb-4">11. Contact Us</h2>
+                <p className="text-gray-300 mb-3">
+                  If you have questions or concerns about this Privacy Policy, please contact us:
+                </p>
+                <ul className="text-gray-300 space-y-2">
+                  <li><strong>GitHub:</strong> <a href="https://github.com/adi0900/TrueGaurdian.git" target="_blank" className="text-blue-400 hover:text-blue-300">https://github.com/adi0900/TrueGaurdian.git</a></li>
+                  <li><strong>Support Page:</strong> <a href="support.html" className="text-blue-400 hover:text-blue-300">Visit Support</a></li>
+                </ul>
+              </div>
+
+              <div className="text-center pt-8 border-t border-white/10">
+                <p className="text-gray-500 text-sm">© 2025 TrueGuardian. All rights reserved.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      return (
+        <div className="min-h-screen">
+          <Navbar />
+          <PrivacyPolicy />
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support - TrueGuardian</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%);
+      min-height: 100vh;
+      color: white;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+    }
+    .glass-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-2px);
+    }
+    .faq-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .faq-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .faq-answer.open {
+      max-height: 500px;
+      margin-top: 1rem;
+    }
+    @media print {
+      body { background: white; color: black; }
+      .glass-card { background: white; border: 1px solid #ccc; }
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    function Navbar() {
+      return (
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md shadow-lg no-print">
+          <div className="max-w-screen-2xl mx-auto px-6">
+            <div className="flex items-center justify-between py-4 border-b border-white/10">
+              <a href="index.html" className="text-white text-2xl md:text-3xl font-black tracking-widest hover:text-gray-300 transition-colors">TG</a>
+              <button onClick={() => window.print()} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all">
+                📥 Download PDF
+              </button>
+            </div>
+          </div>
+        </nav>
+      );
+    }
+
+    function FAQItem({ question, answer }) {
+      const [isOpen, setIsOpen] = useState(false);
+
+      return (
+        <div className="faq-item" onClick={() => setIsOpen(!isOpen)}>
+          <div className="flex items-center justify-between">
+            <h3 className="font-semibold text-lg">{question}</h3>
+            <svg className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+          <div className={`faq-answer ${isOpen ? 'open' : ''}`}>
+            <p className="text-gray-400">{answer}</p>
+          </div>
+        </div>
+      );
+    }
+
+    function Support() {
+      const faqs = [
+        {
+          question: "How do I install TrueGuardian?",
+          answer: "Download the extension, open chrome://extensions/, enable Developer Mode, click 'Load unpacked', and select the extension folder. See our Installation Guide for detailed steps."
+        },
+        {
+          question: "Why aren't charts showing in my dashboard?",
+          answer: "Ensure you have internet connection for Chart.js CDN. Alternatively, copy the advanced version files (background-advanced.js, popup-advanced.html, popup-advanced.js) to enable offline charts."
+        },
+        {
+          question: "How do I enable AI threat detection?",
+          answer: "Configure AWS Bedrock credentials in background.js. You'll need an AWS account with Bedrock API access and Claude 3.5 Sonnet model enabled in your region."
+        },
+        {
+          question: "Is my data sent to external servers?",
+          answer: "No. All threat data is stored locally in your browser by default. Data is only sent to AWS if you configure Bedrock integration with your own credentials."
+        },
+        {
+          question: "How do I export threat data?",
+          answer: "Click the extension icon, go to the Threats tab, and click 'Export CSV' or 'Export JSON'. You can filter threats before exporting."
+        },
+        {
+          question: "Can I use TrueGuardian on multiple browsers?",
+          answer: "Yes, install the extension separately in each Chromium-based browser (Chrome, Edge, Brave, etc.). Data is not synced between browsers."
+        },
+        {
+          question: "How do I clear all threat data?",
+          answer: "Open the extension dashboard, go to the Threats tab, and click the 'Clear All' button. This will permanently delete all stored threat data."
+        },
+        {
+          question: "What threats does TrueGuardian detect?",
+          answer: "SQLi (SQL Injection), XSS (Cross-Site Scripting), CSRF, RCE (Remote Code Execution), Data Exfiltration, Malware, Phishing, Privacy Violations, and API Abuse."
+        },
+        {
+          question: "Why am I getting false positive alerts?",
+          answer: "AI detection is probabilistic. Check the confidence score - lower scores may be false positives. You can adjust sensitivity in settings or whitelist specific domains."
+        },
+        {
+          question: "How do I integrate with SIEM systems?",
+          answer: "Configure webhook endpoints in background.js. TrueGuardian supports Splunk HEC, Datadog Events API, and custom webhooks. See documentation for examples."
+        }
+      ];
+
+      return (
+        <div className="pt-24 pb-16 px-6">
+          <div className="max-w-6xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-12">
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                TrueGuardian Support
+              </h1>
+              <p className="text-gray-300 text-lg">Get help with installation, troubleshooting, and features</p>
+            </div>
+
+            {/* Quick Links */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+              <a href="installation-guide.html" className="glass-card text-center no-underline">
+                <div className="text-4xl mb-3">📦</div>
+                <h3 className="font-semibold mb-2">Installation Guide</h3>
+                <p className="text-gray-400 text-sm">Step-by-step setup instructions</p>
+              </a>
+
+              <a href="documentation.html" className="glass-card text-center no-underline">
+                <div className="text-4xl mb-3">📚</div>
+                <h3 className="font-semibold mb-2">Documentation</h3>
+                <p className="text-gray-400 text-sm">Complete feature reference</p>
+              </a>
+
+              <a href="https://github.com/adi0900/TrueGaurdian.git" target="_blank" className="glass-card text-center no-underline">
+                <div className="text-4xl mb-3">💻</div>
+                <h3 className="font-semibold mb-2">GitHub</h3>
+                <p className="text-gray-400 text-sm">Source code and issues</p>
+              </a>
+
+              <a href="threats.html" className="glass-card text-center no-underline">
+                <div className="text-4xl mb-3">🚨</div>
+                <h3 className="font-semibold mb-2">Live Dashboard</h3>
+                <p className="text-gray-400 text-sm">View threat monitoring demo</p>
+              </a>
+            </div>
+
+            {/* FAQ Section */}
+            <div className="glass-card mb-12">
+              <h2 className="text-3xl font-bold mb-6">Frequently Asked Questions</h2>
+              <div>
+                {faqs.map((faq, index) => (
+                  <FAQItem key={index} question={faq.question} answer={faq.answer} />
+                ))}
+              </div>
+            </div>
+
+            {/* Contact & Resources */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Contact Options */}
+              <div className="glass-card">
+                <h2 className="text-2xl font-bold mb-4">📞 Contact Us</h2>
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-semibold mb-2">GitHub Issues</h3>
+                    <p className="text-gray-400 text-sm mb-2">Report bugs or request features:</p>
+                    <a href="https://github.com/adi0900/TrueGaurdian.git/issues" target="_blank" className="text-blue-400 hover:text-blue-300 text-sm">
+                      https://github.com/adi0900/TrueGaurdian.git/issues
+                    </a>
+                  </div>
+
+                  <div>
+                    <h3 className="font-semibold mb-2">Documentation Files</h3>
+                    <p className="text-gray-400 text-sm">Check extension folder for:</p>
+                    <ul className="list-disc list-inside text-gray-400 text-sm ml-4 mt-2">
+                      <li>README.md</li>
+                      <li>ADVANCED-FEATURES.md</li>
+                      <li>QUICK-START-ADVANCED.md</li>
+                      <li>IMPLEMENTATION-GUIDE.md</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* Troubleshooting Quick Tips */}
+              <div className="glass-card">
+                <h2 className="text-2xl font-bold mb-4">🔧 Quick Troubleshooting</h2>
+                <div className="space-y-3">
+                  <div>
+                    <h3 className="font-semibold mb-1 text-sm">Extension not loading?</h3>
+                    <p className="text-gray-400 text-xs">Reload from chrome://extensions/</p>
+                  </div>
+
+                  <div>
+                    <h3 className="font-semibold mb-1 text-sm">No threats detected?</h3>
+                    <p className="text-gray-400 text-xs">Check AWS credentials and API endpoint</p>
+                  </div>
+
+                  <div>
+                    <h3 className="font-semibold mb-1 text-sm">Charts not rendering?</h3>
+                    <p className="text-gray-400 text-xs">Enable internet for Chart.js CDN</p>
+                  </div>
+
+                  <div>
+                    <h3 className="font-semibold mb-1 text-sm">Export button missing?</h3>
+                    <p className="text-gray-400 text-xs">Use advanced version files</p>
+                  </div>
+
+                  <div>
+                    <h3 className="font-semibold mb-1 text-sm">High CPU usage?</h3>
+                    <p className="text-gray-400 text-xs">Clear old data or reduce monitoring scope</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* System Requirements */}
+            <div className="glass-card mt-6">
+              <h2 className="text-2xl font-bold mb-4">💻 System Requirements</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h3 className="font-semibold mb-3">Minimum Requirements</h3>
+                  <ul className="space-y-2 text-gray-300 text-sm">
+                    <li>✅ Chrome 88+ or Chromium-based browser</li>
+                    <li>✅ 100 MB free disk space</li>
+                    <li>✅ Internet connection (for AI features)</li>
+                    <li>✅ Developer mode permissions</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold mb-3">Recommended</h3>
+                  <ul className="space-y-2 text-gray-300 text-sm">
+                    <li>🔵 Chrome 120+ (latest version)</li>
+                    <li>🔵 4 GB RAM or higher</li>
+                    <li>🔵 AWS Bedrock account (for AI)</li>
+                    <li>🔵 Fast internet connection</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Additional Resources */}
+            <div className="glass-card mt-6">
+              <h2 className="text-2xl font-bold mb-4">📖 Additional Resources</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <a href="installation-guide.html" className="text-blue-400 hover:text-blue-300 text-sm">
+                  → Installation Guide
+                </a>
+                <a href="privacy-policy.html" className="text-blue-400 hover:text-blue-300 text-sm">
+                  → Privacy Policy
+                </a>
+                <a href="terms-of-service.html" className="text-blue-400 hover:text-blue-300 text-sm">
+                  → Terms of Service
+                </a>
+                <a href="documentation.html" className="text-blue-400 hover:text-blue-300 text-sm">
+                  → Full Documentation
+                </a>
+                <a href="overview.html" className="text-blue-400 hover:text-blue-300 text-sm">
+                  → Feature Overview
+                </a>
+                <a href="threats.html" className="text-blue-400 hover:text-blue-300 text-sm">
+                  → Threat Dashboard Demo
+                </a>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="text-center mt-12 pt-8 border-t border-white/10">
+              <p className="text-gray-400 mb-2">
+                Still need help? Open an issue on <a href="https://github.com/adi0900/TrueGaurdian.git" target="_blank" className="text-blue-400 hover:text-blue-300">GitHub</a>
+              </p>
+              <p className="text-gray-500 text-sm">© 2025 TrueGuardian. All rights reserved.</p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      return (
+        <div className="min-h-screen">
+          <Navbar />
+          <Support />
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

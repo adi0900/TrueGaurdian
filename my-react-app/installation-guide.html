@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Installation Guide - TrueGuardian</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%);
+      min-height: 100vh;
+      color: white;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+    .step-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .code-block {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1rem 0;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 0.875rem;
+    }
+    @media print {
+      body { background: white; color: black; }
+      .glass-card { background: white; border: 1px solid #ccc; }
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    function Navbar() {
+      return (
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md shadow-lg no-print">
+          <div className="max-w-screen-2xl mx-auto px-6">
+            <div className="flex items-center justify-between py-4 border-b border-white/10">
+              <a href="index.html" className="text-white text-2xl md:text-3xl font-black tracking-widest hover:text-gray-300 transition-colors">TG</a>
+              <button onClick={() => window.print()} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all">
+                📥 Download PDF
+              </button>
+            </div>
+          </div>
+        </nav>
+      );
+    }
+
+    function InstallationGuide() {
+      return (
+        <div className="pt-24 pb-16 px-6">
+          <div className="max-w-4xl mx-auto">
+            <div className="glass-card">
+              {/* Header */}
+              <div className="text-center mb-8">
+                <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                  TrueGuardian Installation Guide
+                </h1>
+                <p className="text-gray-300">Complete installation and setup instructions</p>
+              </div>
+
+              {/* Prerequisites */}
+              <div className="mb-8">
+                <h2 className="text-2xl font-bold mb-4">📋 Prerequisites</h2>
+                <ul className="list-disc list-inside text-gray-300 space-y-2 ml-4">
+                  <li>Google Chrome (version 88 or higher) or Chromium-based browser</li>
+                  <li>Developer mode access in browser extensions</li>
+                  <li>Downloaded extension package (TrueGuardian-Extension.zip)</li>
+                  <li>AWS Bedrock API credentials (optional, for AI threat detection)</li>
+                </ul>
+              </div>
+
+              {/* Installation Steps */}
+              <div className="mb-8">
+                <h2 className="text-2xl font-bold mb-4">🚀 Installation Steps</h2>
+
+                <div className="step-card">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center font-bold">1</div>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-semibold mb-2">Download Extension Package</h3>
+                      <p className="text-gray-400 mb-3">Download the extension from the homepage or clone from GitHub:</p>
+                      <div className="code-block">
+                        # Option 1: Download from homepage<br/>
+                        Click "Download Extension" button<br/><br/>
+                        # Option 2: Clone from GitHub<br/>
+                        git clone https://github.com/adi0900/TrueGaurdian.git<br/>
+                        cd TrueGaurdian/extension
+                      </div>
+                      <p className="text-gray-400 text-sm mt-2">Extract the ZIP file to a permanent location on your computer.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="step-card">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center font-bold">2</div>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-semibold mb-2">Open Chrome Extensions Page</h3>
+                      <p className="text-gray-400 mb-3">Navigate to the extensions management page:</p>
+                      <div className="code-block">
+                        chrome://extensions/
+                      </div>
+                      <p className="text-gray-400 text-sm mt-2">Or: Menu (⋮) → More Tools → Extensions</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="step-card">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center font-bold">3</div>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-semibold mb-2">Enable Developer Mode</h3>
+                      <p className="text-gray-400 mb-3">Toggle the Developer Mode switch in the top-right corner of the page.</p>
+                      <p className="text-sm text-yellow-400">⚠️ Note: This is required to load unpacked extensions.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="step-card">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center font-bold">4</div>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-semibold mb-2">Load Unpacked Extension</h3>
+                      <p className="text-gray-400 mb-3">Click "Load unpacked" button and select the extension folder:</p>
+                      <ul className="list-disc list-inside text-gray-400 text-sm space-y-1 ml-4">
+                        <li>Navigate to the extracted extension folder</li>
+                        <li>Select the folder containing manifest.json</li>
+                        <li>Click "Select Folder"</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="step-card">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center font-bold">5</div>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-semibold mb-2">Pin Extension to Toolbar</h3>
+                      <p className="text-gray-400 mb-3">Click the puzzle icon (🧩) in the Chrome toolbar, then click the pin icon next to TrueGuardian.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Advanced Features */}
+              <div className="mb-8">
+                <h2 className="text-2xl font-bold mb-4">⚡ Enable Advanced Features</h2>
+                <p className="text-gray-400 mb-4">For the full dashboard experience with interactive charts and grouping:</p>
+                <div className="code-block">
+                  cd extension<br/><br/>
+                  # Backup current files (optional)<br/>
+                  mkdir backups<br/>
+                  copy background.js backups\<br/>
+                  copy popup.html backups\<br/>
+                  copy popup.js backups\<br/><br/>
+                  # Activate advanced version<br/>
+                  copy background-advanced.js background.js<br/>
+                  copy popup-advanced.html popup.html<br/>
+                  copy popup-advanced.js popup.js
+                </div>
+                <p className="text-gray-400 text-sm mt-4">After copying files, reload the extension from chrome://extensions/</p>
+              </div>
+
+              {/* Configuration */}
+              <div className="mb-8">
+                <h2 className="text-2xl font-bold mb-4">⚙️ Configuration (Optional)</h2>
+                <h3 className="text-lg font-semibold mb-3">AWS Bedrock Setup</h3>
+                <p className="text-gray-400 mb-3">To enable AI-powered threat detection, configure AWS credentials:</p>
+                <div className="code-block">
+                  // Edit background.js<br/>
+                  const AWS_CONFIG = &#123;<br/>
+                  &nbsp;&nbsp;region: 'us-east-1',<br/>
+                  &nbsp;&nbsp;accessKeyId: 'YOUR_ACCESS_KEY',<br/>
+                  &nbsp;&nbsp;secretAccessKey: 'YOUR_SECRET_KEY'<br/>
+                  &#125;;
+                </div>
+              </div>
+
+              {/* Verification */}
+              <div className="mb-8">
+                <h2 className="text-2xl font-bold mb-4">✅ Verification Checklist</h2>
+                <div className="space-y-2">
+                  <label className="flex items-center gap-3 text-gray-300">
+                    <input type="checkbox" className="w-5 h-5" />
+                    <span>Extension icon appears in toolbar</span>
+                  </label>
+                  <label className="flex items-center gap-3 text-gray-300">
+                    <input type="checkbox" className="w-5 h-5" />
+                    <span>Dashboard opens when clicking extension icon</span>
+                  </label>
+                  <label className="flex items-center gap-3 text-gray-300">
+                    <input type="checkbox" className="w-5 h-5" />
+                    <span>Statistics cards show correct counts</span>
+                  </label>
+                  <label className="flex items-center gap-3 text-gray-300">
+                    <input type="checkbox" className="w-5 h-5" />
+                    <span>Charts render properly (if using advanced version)</span>
+                  </label>
+                  <label className="flex items-center gap-3 text-gray-300">
+                    <input type="checkbox" className="w-5 h-5" />
+                    <span>Export buttons work (CSV/JSON)</span>
+                  </label>
+                </div>
+              </div>
+
+              {/* Troubleshooting */}
+              <div className="mb-8">
+                <h2 className="text-2xl font-bold mb-4">🔧 Troubleshooting</h2>
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-semibold mb-2">Extension doesn't load?</h3>
+                    <p className="text-gray-400 text-sm">Check that manifest.json exists in the selected folder and Developer Mode is enabled.</p>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-2">Charts not showing?</h3>
+                    <p className="text-gray-400 text-sm">Ensure internet connection for Chart.js CDN or use advanced version files.</p>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-2">Need more help?</h3>
+                    <p className="text-gray-400 text-sm">Visit <a href="support.html" className="text-blue-400 hover:text-blue-300">Support Page</a> or check GitHub issues.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="text-center pt-8 border-t border-white/10">
+                <p className="text-gray-400 text-sm">
+                  For detailed documentation, visit the <a href="documentation.html" className="text-blue-400 hover:text-blue-300">Documentation Page</a>
+                </p>
+                <p className="text-gray-500 text-xs mt-2">© 2025 TrueGuardian. All rights reserved.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      return (
+        <div className="min-h-screen">
+          <Navbar />
+          <InstallationGuide />
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
