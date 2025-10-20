@@ -103,6 +103,96 @@ Then reload the extension from `chrome://extensions/`
 
 ---
 
+## 🏗️ Architecture
+
+### System Architecture Diagram
+
+```mermaid
+graph TB
+    subgraph "User Browser"
+        A[Web Page] --> B[Content Script]
+        B --> C[Background Service Worker]
+        D[Extension Popup] <--> C
+    end
+
+    subgraph "Chrome APIs"
+        C --> E[WebRequest API]
+        C --> F[Storage API]
+        C --> G[Notifications API]
+    end
+
+    subgraph "AWS Cloud"
+        C --> H[AWS Bedrock]
+        H --> I[Claude 3.5 Sonnet]
+        C --> J[AWS SNS]
+        C --> K[AWS EventBridge]
+    end
+
+    subgraph "External Integrations"
+        C --> L[Splunk HEC]
+        C --> M[Datadog API]
+        C --> N[Custom Webhooks]
+    end
+
+    subgraph "Data Flow"
+        E --> |HTTP/HTTPS Requests| C
+        C --> |AI Analysis| I
+        I --> |Threat Detection| C
+        C --> |Store Threats| F
+        C --> |Alert User| G
+        C --> |Export Data| O[CSV/JSON]
+    end
+
+    style A fill:#e1f5ff
+    style C fill:#ffe1e1
+    style I fill:#e1ffe1
+    style D fill:#fff4e1
+```
+
+### Component Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant WebPage
+    participant ContentScript
+    participant Background
+    participant Bedrock
+    participant Storage
+    participant Popup
+
+    User->>WebPage: Browse Website
+    WebPage->>ContentScript: Page Load
+    ContentScript->>Background: Monitor Requests
+    Background->>Background: Capture Request Details
+    Background->>Bedrock: Analyze with AI
+    Bedrock-->>Background: Threat Assessment
+    Background->>Storage: Save Threat Data
+    Background->>ContentScript: Show Warning Modal
+    Background->>User: Browser Notification
+    User->>Popup: Open Dashboard
+    Popup->>Storage: Fetch Threats
+    Storage-->>Popup: Return Data
+    Popup->>User: Display Charts & Stats
+    User->>Popup: Export Data
+    Popup->>User: Download CSV/JSON
+```
+
+### Key Components
+
+| Component | Function | Technology |
+|-----------|----------|------------|
+| **Content Script** | Injects into web pages, monitors DOM | JavaScript |
+| **Background Worker** | Analyzes requests, AI integration | Service Worker |
+| **Popup Dashboard** | Interactive UI with charts | HTML/CSS/Chart.js |
+| **WebRequest API** | Intercepts HTTP/HTTPS traffic | Chrome API |
+| **Storage API** | Persists threat data locally | Chrome Storage |
+| **AWS Bedrock** | AI-powered threat analysis | Claude 3.5 Sonnet |
+| **Export Engine** | CSV/JSON data export | JavaScript |
+| **SIEM Connectors** | External platform integration | REST APIs |
+
+---
+
 ## 🏗️ Project Structure
 
 ```
